@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: solariq
+    runtime: python
+    buildCommand: cd frontend && npm install && npm run build && cd .. && cd solariq_backend && pip install -r requirements.txt
+    startCommand: cd solariq_backend && gunicorn -c gunicorn.conf.py wsgi:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHON_VERSION
+        value: 3.12
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: solariq-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://solariq.onrender.com
+
+databases:
+  - name: solariq-db
+    databaseName: solariq
+    user: solariq
+    plan: free

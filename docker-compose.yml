@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: solariq_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root_pass
+      MYSQL_DATABASE: solariq_db
+      MYSQL_USER: solariq
+      MYSQL_PASSWORD: solariq_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./solariq_backend
+      dockerfile: Dockerfile.prod
+    container_name: solariq_api
+    restart: unless-stopped
+    env_file:
+      - ./solariq_backend/.env
+    environment:
+      DATABASE_URL: mysql+pymysql://solariq:solariq_pass@mysql:3306/solariq_db
+      FLASK_ENV: production
+      CORS_ORIGINS: http://localhost,http://localhost:80
+    volumes:
+      - ./solariq_backend/storage:/app/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    container_name: solariq_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+
+volumes:
+  mysql_data:

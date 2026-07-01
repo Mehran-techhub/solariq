@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.env
+*.egg-info/
+dist/
+*.egg
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+solariq_backend/.env
+
+# Generated reports
+solariq_backend/storage/reports/*
+
+# User uploads
+solariq_backend/storage/avatars/*
+
+# Logs
+*.log
