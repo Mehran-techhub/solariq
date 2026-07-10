@@ -40,7 +40,7 @@ class AnalyticsService:
             consumption = []
             efficiency = []
 
-        labels = []
+        labels = AnalyticsService.LABELS.get(period, [])
         load_distribution = AnalyticsService._load_distribution(generation, consumption)
 
         avg_gen = AnalyticsService._avg(generation)

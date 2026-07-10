@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 from models.user import User
@@ -37,7 +38,7 @@ class AdminService:
                     "id": u.id,
                     "full_name": u.full_name,
                     "email": u.email,
-                    "last_login": u.last_login.isoformat() if u.last_login else None,
+                    "last_login": u.last_login.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if u.last_login else None,
                 }
                 for u in recent_logins
             ],
@@ -93,7 +94,7 @@ class AdminService:
             "api": "running",
             "prediction_service_ready": prediction_service_ready,
             "weather_api_ready": weather_api_ready,
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(PKT).isoformat(),
         }
 
     @staticmethod
