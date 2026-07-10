@@ -20,6 +20,9 @@ class WeatherService:
 
     @staticmethod
     def _compute_solar_impact(clouds, temp):
+        hour = datetime.now(PKT).hour
+        if hour < 6 or hour > 18:
+            return "Nighttime \u2014 solar generation is not available", "Night"
         if clouds > 70:
             impact = "High cloud cover \u2014 solar production may decrease significantly"
             outlook = "Low"

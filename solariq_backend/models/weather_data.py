@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -33,5 +34,5 @@ class WeatherData(db.Model):
             "sunset": self.sunset or "",
             "solar_impact": self.solar_impact or "",
             "generation_outlook": self.generation_outlook or "",
-            "fetched_at": self.fetched_at.isoformat() if self.fetched_at else None,
+            "fetched_at": self.fetched_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.fetched_at else None,
         }

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -24,5 +25,5 @@ class Simulation(db.Model):
             "solar_share": self.solar_share,
             "grid_share": self.grid_share,
             "estimated_cost": self.estimated_cost,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }

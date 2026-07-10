@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -112,7 +113,7 @@ class SolarPrediction(db.Model):
             "weather_reliability": self.weather_reliability,
             "weather_explanation": self.weather_explanation,
             "curve_data": json.loads(self.curve_data) if self.curve_data else [],
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }
 
 
@@ -135,5 +136,5 @@ class PredictionLog(db.Model):
             "action": self.action,
             "details": self.details,
             "ip_address": self.ip_address,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }

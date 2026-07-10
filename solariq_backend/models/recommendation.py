@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -17,5 +18,5 @@ class Recommendation(db.Model):
             "id": self.id,
             "user_id": self.user_id,
             "recommendation_text": self.recommendation_text,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }

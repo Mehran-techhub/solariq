@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -19,5 +20,5 @@ class MaintenanceAlert(db.Model):
             "user_id": self.user_id,
             "alert_message": self.alert_message,
             "status": self.status,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }

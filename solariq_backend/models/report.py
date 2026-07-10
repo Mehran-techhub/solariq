@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -20,5 +21,5 @@ class Report(db.Model):
             "report_type": self.report_type,
             "report_name": self.report_name,
             "file_path": self.file_path,
-            "generated_at": self.generated_at.isoformat() if self.generated_at else None,
+            "generated_at": self.generated_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.generated_at else None,
         }

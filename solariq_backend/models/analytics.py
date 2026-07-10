@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -21,5 +22,5 @@ class Analytics(db.Model):
             "generation": self.generation,
             "consumption": self.consumption,
             "efficiency": self.efficiency,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -18,5 +19,5 @@ class ActivityLog(db.Model):
             "id": self.id,
             "action": self.action,
             "module": self.module,
-            "timestamp": self.timestamp.isoformat() if self.timestamp else None,
+            "timestamp": self.timestamp.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.timestamp else None,
         }

@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -21,5 +22,5 @@ class DashboardStats(db.Model):
             "predicted_yield": self.predicted_yield,
             "optimization_score": self.optimization_score,
             "estimated_savings": self.estimated_savings,
-            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "created_at": self.created_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.created_at else None,
         }

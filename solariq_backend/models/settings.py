@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from utils.pkt_timezone import PKT
 
 from extensions import db
 
@@ -27,5 +28,5 @@ class UserSettings(db.Model):
             "email_alerts": self.email_alerts,
             "timezone": self.timezone,
             "openweather_api_key": self.openweather_api_key or "",
-            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+            "updated_at": self.updated_at.replace(tzinfo=timezone.utc).astimezone(PKT).isoformat() if self.updated_at else None,
         }
