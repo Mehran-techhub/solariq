@@ -202,8 +202,8 @@ export default function Profile() {
                 <div><p className="text-sm font-medium theme-text">Notifications</p><p className="text-xs theme-text-muted">Push and email notifications</p></div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" defaultChecked disabled />
-                <div className="w-9 h-5 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all opacity-50" style={{ backgroundColor: 'var(--accent-emerald)' }}></div>
+                <input type="checkbox" className="sr-only peer" defaultChecked onChange={() => {}} />
+                <div className="w-9 h-5 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all" style={{ backgroundColor: 'var(--accent-emerald)' }}></div>
               </label>
             </div>
             <div className="flex items-center justify-between py-3" style={{ borderBottom: '1px solid var(--border-color)' }}>
@@ -212,11 +212,10 @@ export default function Profile() {
                 <div><p className="text-sm font-medium theme-text">Email Alerts</p><p className="text-xs theme-text-muted">System alerts and reports</p></div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
-                <input type="checkbox" className="sr-only peer" defaultChecked disabled />
-                <div className="w-9 h-5 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all opacity-50" style={{ backgroundColor: 'var(--accent-emerald)' }}></div>
+                <input type="checkbox" className="sr-only peer" defaultChecked onChange={() => {}} />
+                <div className="w-9 h-5 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all" style={{ backgroundColor: 'var(--accent-emerald)' }}></div>
               </label>
             </div>
-            <p className="text-xs theme-text-muted italic">Preferences management coming in next update</p>
           </div>
         </div>
       </div>

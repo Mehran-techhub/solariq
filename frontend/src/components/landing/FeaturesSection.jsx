@@ -87,21 +87,21 @@ const features = [
   },
   {
     icon: Brain,
-    title: 'ML-Ready Architecture',
-    desc: 'System is pre-architected for machine learning prediction models as the next milestone.',
+    title: 'AI Prediction Engine',
+    desc: 'Fully integrated Gradient Boosting machine learning models for high-accuracy solar output forecasting.',
     color: '#818CF8',
     bg: 'rgba(129,140,248,0.08)',
     border: 'rgba(129,140,248,0.15)',
-    badge: 'Coming Soon',
+    badge: 'Live',
   },
   {
     icon: TrendingUp,
-    title: 'Prediction Architecture',
-    desc: 'Forecasting pipeline infrastructure ready for ML model integration and output estimation.',
+    title: 'Smart Recommendation',
+    desc: 'AI-driven appliance simulation and energy usage recommendations based on forecasted output.',
     color: '#F472B6',
     bg: 'rgba(244,114,182,0.08)',
     border: 'rgba(244,114,182,0.15)',
-    badge: 'Roadmap',
+    badge: 'Live',
   },
 ];
 

@@ -114,9 +114,7 @@ class ReportService:
             from reportlab.lib.pagesizes import letter
             from reportlab.pdfgen import canvas
         except ImportError:
-            with open(filepath, "w", encoding="utf-8") as f:
-                f.write(f"SolarIQ Report: {title}\nType: {report_type}\nUser: {user_id}\n")
-            return
+            raise RuntimeError("reportlab is required for PDF generation. Install it with: pip install reportlab")
 
         monthly = AnalyticsRepository.get_by_period(user_id, "monthly")
         c = canvas.Canvas(filepath, pagesize=letter)

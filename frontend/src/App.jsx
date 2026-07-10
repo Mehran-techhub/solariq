@@ -31,6 +31,7 @@ import AdminPredictions from './pages/admin/AdminPredictions';
 import AdminReportsList from './pages/admin/AdminReportsList';
 import AdminWeatherData from './pages/admin/AdminWeatherData';
 
+import FloatingNav from './components/FloatingNav';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -77,6 +78,7 @@ export default function App() {
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
+        <FloatingNav />
       </BrowserRouter>
       </ThemeProvider>
     </AuthProvider>

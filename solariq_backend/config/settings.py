@@ -6,7 +6,7 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
 def resolve_database_uri():
-    """MySQL only — configured via DATABASE_URL or MYSQL_* env vars."""
+    """Database URI — supports MySQL and SQLite. Falls back to SQLite."""
     explicit = os.getenv("DATABASE_URL", "").strip()
     if explicit:
         return explicit
@@ -17,13 +17,13 @@ def resolve_database_uri():
     port = os.getenv("MYSQL_PORT", "3306")
     database = os.getenv("MYSQL_DB", "solariq")
 
-    if not password:
-        raise RuntimeError(
-            "MySQL not configured. Set DATABASE_URL or MYSQL_PASSWORD in .env"
-        )
+    if password:
+        safe_pass = quote_plus(password)
+        return f"mysql+pymysql://{user}:{safe_pass}@{host}:{port}/{database}"
 
-    safe_pass = quote_plus(password)
-    return f"mysql+pymysql://{user}:{safe_pass}@{host}:{port}/{database}"
+    db_path = os.path.join(os.path.dirname(BASE_DIR), "instance", "solariq.db")
+    os.makedirs(os.path.dirname(db_path), exist_ok=True)
+    return f"sqlite:///{db_path}"
 
 
 class Config:

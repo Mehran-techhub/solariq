@@ -8,61 +8,78 @@ from services.prediction_service import PredictionService as CorePredictionServi
 logger = logging.getLogger(__name__)
 
 MODEL_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ml_models", "solar_model.pkl")
-FEATURES = ["temperature", "humidity", "cloud_cover", "irradiance", "hour", "month", "day"]
-
+PIPELINES_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ml", "pipelines")
+FEATURES = ['temperature', 'humidity', 'cloud_cover', 'wind_speed', 'pressure', 'irradiance', 'hour', 'month']
 
 class MLPredictionService:
     _model_cache = None
+    _preprocessor_cache = None
 
     @classmethod
     def _load_model(cls):
-        if cls._model_cache is not None:
-            return cls._model_cache
+        if cls._model_cache is not None and cls._preprocessor_cache is not None:
+            return cls._model_cache, cls._preprocessor_cache
+            
         if not os.path.exists(MODEL_PATH):
             logger.info("No trained model found at %s — using rule-based fallback", MODEL_PATH)
             cls._model_cache = False
-            return None
+            cls._preprocessor_cache = False
+            return None, None
+            
         try:
             import joblib
-            data = joblib.load(MODEL_PATH)
-            model = data["model"] if isinstance(data, dict) and "model" in data else data
-            cls._model_cache = model
-            logger.info("ML model loaded from %s", MODEL_PATH)
-            return model
+            from .preprocessing.preprocessing import SolarDataPreprocessor
+            
+            cls._model_cache = joblib.load(MODEL_PATH)
+            cls._preprocessor_cache = SolarDataPreprocessor.load(PIPELINES_DIR)
+            
+            logger.info("ML model and preprocessor loaded successfully")
+            return cls._model_cache, cls._preprocessor_cache
         except Exception as e:
             logger.warning("Failed to load ML model: %s — using rule-based fallback", e)
             cls._model_cache = False
-            return None
+            cls._preprocessor_cache = False
+            return None, None
 
     @staticmethod
     def predict_solar_output(inputs: dict) -> dict:
-        model = MLPredictionService._load_model()
-        if model:
+        model, preprocessor = MLPredictionService._load_model()
+        if model and preprocessor:
             try:
-                return MLPredictionService._ml_predict(inputs, model)
+                return MLPredictionService._ml_predict(inputs, model, preprocessor)
             except Exception as e:
                 logger.warning("ML inference failed: %s — falling back to rule-based", e)
         return CorePredictionService.calculate(inputs)
 
     @staticmethod
-    def _ml_predict(inputs: dict, model) -> dict:
+    def _ml_predict(inputs: dict, model, preprocessor) -> dict:
         import pandas as pd
+        from datetime import datetime
 
         time_str = inputs.get("time", "12:00")
         hour = int(time_str.split(":")[0]) if ":" in time_str else 12
+        
+        # Extract date or use current
+        date_str = inputs.get("date", datetime.now().strftime("%Y-%m-%d"))
+        try:
+            month = datetime.strptime(date_str, "%Y-%m-%d").month
+        except:
+            month = 6
 
         row = {
             "temperature": float(inputs.get("temperature", 25)),
-            "humidity": float(inputs.get("humidity", 0)),
+            "humidity": float(inputs.get("humidity", 50)),
             "cloud_cover": float(inputs.get("cloud_cover", inputs.get("clouds", 0))),
+            "wind_speed": float(inputs.get("wind_speed", 5)),
+            "pressure": float(inputs.get("pressure", 1013)),
             "irradiance": float(inputs.get("solar_irradiance", inputs.get("sunlight", 800))),
             "hour": hour,
-            "month": inputs.get("month", 6),
-            "day": inputs.get("day", 15),
+            "month": month,
         }
 
-        df = pd.DataFrame([row])[FEATURES]
-        ml_power = float(model.predict(df)[0])
+        df = pd.DataFrame([row])
+        X_scaled = preprocessor.preprocess_inference(df)
+        ml_power = float(model.predict(X_scaled)[0])
         ml_power = max(0.0, ml_power)
 
         effective_cap = float(inputs.get("panel_capacity", 5.0)) * int(inputs.get("panel_count", 1))
@@ -71,7 +88,7 @@ class MLPredictionService:
 
         result = CorePredictionService.calculate(inputs)
         result["predicted_output"] = round(ml_power, 2)
-        result["confidence"] = round(min(95.0, 60.0 + (ml_power / max_possible) * 30.0), 1)
+        result["confidence"] = round(min(98.0, 70.0 + (ml_power / max_possible) * 28.0), 1) if max_possible > 0 else 70.0
 
         irradiance = row["irradiance"]
         clouds = row["cloud_cover"]

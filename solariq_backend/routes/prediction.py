@@ -96,3 +96,31 @@ def get_prediction_report(prediction_id):
         },
     }
     return api_response(message="Report generated", data=report)
+
+@prediction_bp.route("/model/status", methods=["GET"])
+@jwt_required()
+def model_status():
+    from ml.prediction_service import MLPredictionService
+    model, preprocessor = MLPredictionService._load_model()
+    
+    status = "Active" if model and preprocessor else "Inactive (Rule-based Fallback)"
+    return api_response(message="Model status retrieved", data={
+        "status": status,
+        "type": "Gradient Boosting Regressor",
+        "features": ["temperature", "humidity", "cloud_cover", "wind_speed", "pressure", "irradiance", "hour", "month"]
+    })
+
+@prediction_bp.route("/model/metrics", methods=["GET"])
+@jwt_required()
+def model_metrics():
+    import os
+    metrics_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "ml_models", "metrics.json")
+    if os.path.isfile(metrics_path):
+        with open(metrics_path) as f:
+            return api_response(message="Model metrics retrieved", data=json.load(f))
+    from ml.prediction_service import MLPredictionService
+    model, _ = MLPredictionService._load_model()
+    return api_response(message="Model metrics retrieved", data={
+        "status": "active" if model else "fallback",
+        "note": "Train the model to populate metrics. See solar_ml/train.py"
+    })

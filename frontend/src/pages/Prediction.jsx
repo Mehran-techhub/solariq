@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { predictionApi, weatherApi } from '../api';
 import { toast } from 'react-toastify';
 import TimeAgo from '../utils/TimeAgo';
+import MLModelStatus from '../components/dashboard/MLModelStatus';
 import {
   Loader2, Zap, TrendingUp, Activity, Sun, Cloud, Thermometer, Droplets,
   Wind, Clock, Battery, Cpu, AlertTriangle, Download, Trash2, ChevronDown,
@@ -283,6 +284,9 @@ export default function Prediction() {
       </div>
 
       <div className="grid lg:grid-cols-5 gap-6">
+        <div className="lg:col-span-5">
+          <MLModelStatus />
+        </div>
         {/* Left: Form */}
         {showForm && (
           <div className="lg:col-span-2 rounded-2xl p-6 h-fit" style={{ backgroundColor: 'var(--bg-card)', border: '1px solid var(--border-color)' }}>

@@ -17,6 +17,8 @@ export const predictionApi = {
   getById: async (id) => (await api.get(`/predictions/${id}`)).data,
   delete: async (id) => (await api.delete(`/predictions/${id}`)).data,
   report: async (id) => (await api.get(`/predictions/report/${id}`)).data,
+  status: async () => (await api.get('/predictions/model/status')).data,
+  metrics: async () => (await api.get('/predictions/model/metrics')).data,
 };
 
 export const simulationApi = {
