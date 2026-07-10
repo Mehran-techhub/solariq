@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Cpu, Activity, Server, Loader2, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Cpu, Loader2 } from 'lucide-react';
 import { predictionApi } from '../../api';
 
 export default function MLModelStatus() {
@@ -53,7 +53,7 @@ export default function MLModelStatus() {
           </p>
         </div>
 
-        {metrics && (
+        {metrics && metrics.r2_score != null && (
           <div className="flex gap-4">
             <div className="text-center">
               <p className="text-[10px] theme-text-muted uppercase tracking-wider mb-0.5">Accuracy (R²)</p>
