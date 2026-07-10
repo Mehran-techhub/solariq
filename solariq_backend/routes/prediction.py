@@ -97,7 +97,7 @@ def get_prediction_report(prediction_id):
     }
     return api_response(message="Report generated", data=report)
 
-@prediction_bp.route("/model/status", methods=["GET"])
+@prediction_bp.route("/predictions/model/status", methods=["GET"])
 @jwt_required()
 def model_status():
     from ml.prediction_service import MLPredictionService
@@ -110,7 +110,7 @@ def model_status():
         "features": ["temperature", "humidity", "cloud_cover", "wind_speed", "pressure", "irradiance", "hour", "month"]
     })
 
-@prediction_bp.route("/model/metrics", methods=["GET"])
+@prediction_bp.route("/predictions/model/metrics", methods=["GET"])
 @jwt_required()
 def model_metrics():
     import os

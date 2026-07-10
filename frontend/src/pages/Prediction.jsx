@@ -114,10 +114,21 @@ export default function Prediction() {
   const [cityInput, setCityInput] = useState('');
   const [geoResults, setGeoResults] = useState([]);
 
+  const now = new Date();
+  const currentHour = now.getHours();
+  const isNight = currentHour < 6 || currentHour > 18;
+  const defaultIrradiance = isNight ? 0 : (currentHour >= 10 && currentHour <= 14 ? 800 : 400);
+  const defaultCloud = isNight ? 100 : 20;
+  const defaultTime = `${String(currentHour).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
   const { register, handleSubmit, formState: { errors }, setValue, getValues } = useForm({
     defaultValues: {
-      temperature: 30, humidity: 50, cloud_cover: 20, solar_irradiance: 800,
-      wind_speed: 5, time: '12:00',
+      temperature: isNight ? 20 : 30,
+      humidity: isNight ? 70 : 50,
+      cloud_cover: defaultCloud,
+      solar_irradiance: defaultIrradiance,
+      wind_speed: 5,
+      time: defaultTime,
       panel_capacity: 5.0, panel_type: 'Monocrystalline', panel_count: 1,
       installation_angle: 30, battery_capacity: 5.0, battery_current: 2.1,
       location: '',

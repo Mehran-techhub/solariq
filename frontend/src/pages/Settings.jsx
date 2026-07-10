@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { settingsApi, profileApi, healthApi } from '../api';
+import { settingsApi, profileApi, healthApi, predictionApi } from '../api';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-toastify';
@@ -56,6 +56,7 @@ export default function Settings() {
   const [tab, setTab] = useState('profile');
   const [health, setHealth] = useState(null);
   const [healthLoading, setHealthLoading] = useState(false);
+  const [modelStatus, setModelStatus] = useState(null);
   const healthIntervalRef = useRef(null);
 
   const { register: rProf, handleSubmit: hProf, reset: resetProf, formState: { isSubmitting: submittingProf } } = useForm();
@@ -76,6 +77,10 @@ export default function Settings() {
       const res = await healthApi.check();
       setHealth(res);
     } catch { setHealth(null); }
+    try {
+      const model = await predictionApi.status();
+      setModelStatus(model?.data || null);
+    } catch { setModelStatus(null); }
     finally { setHealthLoading(false); }
   };
 
@@ -252,14 +257,8 @@ export default function Settings() {
             <StatusRow label="Database Connection" status={health?.data?.database === 'connected'} loading={healthLoading} />
             <StatusRow label="Prediction Service" status={health?.data?.prediction_service_ready ?? false} loading={healthLoading} />
             <StatusRow label="Weather API" status={health?.data?.weather_api_ready ?? false} loading={healthLoading} />
-            <div className="flex items-center justify-between py-3.5">
-              <span className="text-sm theme-text-secondary">ML Model</span>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full theme-text-muted" style={{ backgroundColor: 'var(--badge-bg)', border: '1px solid var(--badge-border)' }}>
-                Not Available
-              </span>
-            </div>
+            <StatusRow label="ML Model" status={modelStatus?.status === 'Active'} loading={healthLoading} />
           </div>
-          <p className="text-xs theme-text-muted mt-4">The Prediction Service will become available once an ML model is uploaded to the server.</p>
         </div>
       )}
     </div>
