@@ -166,6 +166,7 @@ export default function Prediction() {
             setValue('temperature', w.temperature ?? 30);
             setValue('humidity', Math.round(w.humidity ?? 50));
             setValue('cloud_cover', Math.round(w.cloud_cover ?? 20));
+            setValue('solar_irradiance', Math.round(w.solar_irradiance ?? 0));
             setValue('wind_speed', w.wind_speed ?? 5);
             toast.success('Weather data fetched for your location');
           }
@@ -195,6 +196,7 @@ export default function Prediction() {
         setValue('temperature', w.temperature ?? 30);
         setValue('humidity', Math.round(w.humidity ?? 50));
         setValue('cloud_cover', Math.round(w.cloud_cover ?? 20));
+        setValue('solar_irradiance', Math.round(w.solar_irradiance ?? 0));
         setValue('wind_speed', w.wind_speed ?? 5);
         toast.success('Weather updated');
       }
@@ -234,6 +236,7 @@ export default function Prediction() {
         setValue('temperature', w.temperature ?? 30);
         setValue('humidity', Math.round(w.humidity ?? 50));
         setValue('cloud_cover', Math.round(w.cloud_cover ?? 20));
+        setValue('solar_irradiance', Math.round(w.solar_irradiance ?? 0));
         setValue('wind_speed', w.wind_speed ?? 5);
         toast.success('Weather fetched for ' + loc.display_name.split(',')[0]);
       }

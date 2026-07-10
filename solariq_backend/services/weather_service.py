@@ -97,6 +97,14 @@ class WeatherService:
 
         solar_impact, generation_outlook = WeatherService._compute_solar_impact(clouds, temp)
 
+        current_hour = datetime.now(PKT).hour
+        if 6 <= current_hour <= 18:
+            solar_angle = 1 - abs(current_hour - 12) / 7
+            cloud_factor = 1 - (clouds / 100) * 0.8
+            estimated_irradiance = round(1000 * solar_angle * cloud_factor, 1)
+        else:
+            estimated_irradiance = 0
+
         item = WeatherData(
             temperature=temp,
             humidity=main.get("humidity"),
@@ -111,7 +119,9 @@ class WeatherService:
         )
         WeatherRepository.create(item)
         log_activity(user_id, f"Weather data fetched (lat={lat}, lon={lon})", "weather")
-        return item.to_dict()
+        result = item.to_dict()
+        result["solar_irradiance"] = estimated_irradiance
+        return result
 
     @staticmethod
     def latest(limit=24):
