@@ -8,21 +8,7 @@ import { User, Settings2, Activity, Loader2, CheckCircle, XCircle, Save, Globe, 
 import TimeAgo from '../utils/TimeAgo';
 
 const PAKISTAN_TIMEZONES = [
-  { value: 'Asia/Karachi', label: 'Pakistan Standard Time (PKT) — Karachi, Lahore, Islamabad' },
-  { value: 'Asia/Karachi_Karachi', label: 'Karachi' },
-  { value: 'Asia/Karachi_Lahore', label: 'Lahore' },
-  { value: 'Asia/Karachi_Islamabad', label: 'Islamabad / Rawalpindi' },
-  { value: 'Asia/Karachi_Faisalabad', label: 'Faisalabad' },
-  { value: 'Asia/Karachi_Multan', label: 'Multan' },
-  { value: 'Asia/Karachi_Peshawar', label: 'Peshawar' },
-  { value: 'Asia/Karachi_Quetta', label: 'Quetta' },
-  { value: 'Asia/Karachi_Hyderabad', label: 'Hyderabad' },
-  { value: 'Asia/Karachi_Gujranwala', label: 'Gujranwala' },
-  { value: 'Asia/Karachi_Sialkot', label: 'Sialkot' },
-  { value: 'Asia/Karachi_Sukkur', label: 'Sukkur' },
-  { value: 'Asia/Karachi_Gilgit', label: 'Gilgit - GB' },
-  { value: 'Asia/Karachi_Muzaffarabad', label: 'Muzaffarabad - AJK' },
-  { value: 'Asia/Karachi_Gwadar', label: 'Gwadar - Balochistan' },
+  { value: 'Asia/Karachi', label: 'Pakistan Standard Time (PKT) — UTC+5' },
 ];
 
 const TABS = [

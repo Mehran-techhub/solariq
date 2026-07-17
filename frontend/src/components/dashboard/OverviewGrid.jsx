@@ -38,8 +38,9 @@ export default function OverviewGrid({ overview, loading }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
       <OverviewCard
-        title="Solar Records"
-        value={stats?.total_records ?? '—'}
+        title="Modeled Output"
+        value={stats?.modeled_output ?? '—'}
+        unit="kW"
         icon={Database}
         color="bg-emerald-500"
         delay={0.0}
@@ -55,24 +56,27 @@ export default function OverviewGrid({ overview, loading }) {
         loading={loading}
       />
       <OverviewCard
-        title="Simulations"
-        value={stats?.total_simulations ?? '—'}
+        title="Predicted Yield"
+        value={stats?.predicted_yield ?? '—'}
+        unit="kW"
         icon={Activity}
         color="bg-purple-500"
         delay={0.2}
         loading={loading}
       />
       <OverviewCard
-        title="Reports"
-        value={stats?.total_reports ?? '—'}
+        title="Optimization"
+        value={stats?.optimization_score ?? '—'}
+        unit="%"
         icon={FileText}
         color="bg-amber-500"
         delay={0.3}
         loading={loading}
       />
       <OverviewCard
-        title="Active Alerts"
-        value={stats?.active_alerts ?? '—'}
+        title="Est. Savings"
+        value={stats?.estimated_savings ?? '—'}
+        unit="Rs"
         icon={Bell}
         color="bg-red-500"
         delay={0.4}

@@ -31,6 +31,7 @@ class AuthService:
             email=email,
             password_hash=bcrypt.generate_password_hash(data["password"]).decode("utf-8"),
             phone=data.get("phone"),
+            installation_type=data.get("installation_type", "homeowner"),
             role=data.get("role", "user"),
         )
         UserRepository.create(user)

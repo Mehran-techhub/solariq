@@ -101,7 +101,7 @@ class PredictionService:
         battery_cap = float(data.get("battery_capacity", 0))
         battery_current = float(data.get("battery_current", 0))
 
-        effective_cap = min(panel_cap * panel_count, PredictionService.MAX_SYSTEM_KW * 1000)
+        effective_cap = min(panel_cap * panel_count, PredictionService.MAX_SYSTEM_KW)
 
         power, efficiency = PredictionService._core_power(
             irradiance, temperature, humidity, clouds, hour, effective_cap

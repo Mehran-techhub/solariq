@@ -1,5 +1,4 @@
 from repositories.analytics_repository import AnalyticsRepository
-from services.auth_service import AuthService
 
 
 class AnalyticsService:

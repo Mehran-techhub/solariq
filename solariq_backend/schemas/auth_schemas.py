@@ -6,6 +6,7 @@ class RegisterSchema(Schema):
     email = fields.Email(required=True)
     password = fields.Str(required=True, validate=lambda p: len(p) >= 8)
     phone = fields.Str(load_default=None)
+    installation_type = fields.Str(load_default="homeowner")
     role = fields.Str(load_default="user")
 
 

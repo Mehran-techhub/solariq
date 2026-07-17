@@ -26,13 +26,43 @@ BASE = os.path.dirname(os.path.abspath(__file__))
 DATA_PATH = os.path.join(BASE, "solariq_backend", "ml", "data", "dataset.csv")
 MODEL_OUT = os.path.join(BASE, "solariq_backend", "ml_models", "solar_model.pkl")
 
-# ── 1. Load & explore ─────────────────────────────────────────────────
+# ── 1. Load or generate dataset ────────────────────────────────────────
 print("=" * 60)
 print("SOLAR ENERGY ML TRAINING REPORT")
 print("=" * 60)
 
-df = pd.read_csv(DATA_PATH)
-print(f"\nDataset: {df.shape[0]} rows, {df.shape[1]} columns")
+if os.path.exists(DATA_PATH):
+    df = pd.read_csv(DATA_PATH)
+    print(f"\nLoaded dataset: {df.shape[0]} rows, {df.shape[1]} columns")
+else:
+    print(f"\nDataset not found at {DATA_PATH}")
+    print("Generating synthetic dataset for training...")
+    np.random.seed(42)
+    n = 10000
+    hour = np.random.randint(0, 24, n)
+    irradiance = np.where((hour >= 6) & (hour <= 18),
+                          np.random.uniform(0, 1200, n), 0)
+    temp = np.random.uniform(10, 45, n) - irradiance * 0.005
+    humidity = np.random.uniform(10, 90, n) + irradiance * 0.01
+    cloud_cover = np.clip(np.random.uniform(0, 100, n) - irradiance * 0.03, 0, 100)
+    wind_speed = np.random.uniform(0, 20, n)
+    pressure = np.random.uniform(990, 1025, n)
+    day = np.random.randint(1, 31, n)
+    month = np.random.randint(1, 13, n)
+    noise = np.random.normal(0, 0.1, n)
+    generation = np.maximum(0, irradiance * 0.005 + temp * 0.02 - cloud_cover * 0.01 + wind_speed * 0.01 + noise)
+    generation = np.clip(generation, 0, 6)
+    df = pd.DataFrame({
+        "temperature": temp, "humidity": humidity, "cloud_cover": cloud_cover,
+        "wind_speed": wind_speed, "pressure": pressure, "irradiance": irradiance,
+        "hour": hour, "day": day, "month": month,
+        "solar_energy_generation": generation
+    })
+    os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
+    df.to_csv(DATA_PATH, index=False)
+    print(f"Generated {n} synthetic rows and saved to {DATA_PATH}")
+
+print(f"\nFirst 5 rows:\n{df.head().to_string()}")
 print(f"\nFirst 5 rows:\n{df.head().to_string()}")
 
 print(f"\n--- Basic Statistics ---")

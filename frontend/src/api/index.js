@@ -14,9 +14,7 @@ export const analyticsApi = {
 export const predictionApi = {
   create: async (payload) => (await api.post('/predictions', payload)).data,
   list: async () => (await api.get('/predictions')).data,
-  getById: async (id) => (await api.get(`/predictions/${id}`)).data,
   delete: async (id) => (await api.delete(`/predictions/${id}`)).data,
-  report: async (id) => (await api.get(`/predictions/report/${id}`)).data,
   status: async () => (await api.get('/predictions/model/status')).data,
   metrics: async () => (await api.get('/predictions/model/metrics')).data,
 };
@@ -53,10 +51,6 @@ export const weatherApi = {
   syncStatus: async () => (await api.get('/weather/sync-status')).data,
 };
 
-export const efficiencyApi = {
-  list: async () => (await api.get('/efficiency')).data,
-};
-
 export const recommendationsApi = {
   list: async () => (await api.get('/recommendations')).data,
 };
@@ -64,13 +58,6 @@ export const recommendationsApi = {
 export const maintenanceApi = {
   list: async () => (await api.get('/maintenance')).data,
   update: async (id, status) => (await api.put(`/maintenance/${id}`, { status })).data,
-};
-
-export const solarApi = {
-  list: async () => (await api.get('/solar')).data,
-  create: async (payload) => (await api.post('/solar', payload)).data,
-  update: async (id, payload) => (await api.put(`/solar/${id}`, payload)).data,
-  delete: async (id) => (await api.delete(`/solar/${id}`)).data,
 };
 
 export const activityApi = {
@@ -110,8 +97,6 @@ export const adminApi = {
   getActivity: async () => (await api.get('/admin/activity')).data,
   getUsers: async () => (await api.get('/admin/users')).data,
   getHealth: async () => (await api.get('/admin/health')).data,
-  getSettings: async () => (await api.get('/admin/settings')).data,
-  updateSetting: async (key, value) => (await api.put('/admin/settings', { key, value })).data,
   getSolarRecords: async () => (await api.get('/admin/solar-records')).data,
   getPredictions: async () => (await api.get('/admin/predictions')).data,
   getReports: async () => (await api.get('/admin/reports')).data,

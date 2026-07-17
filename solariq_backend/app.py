@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timezone
 
 from dotenv import load_dotenv
+from utils.pkt_timezone import PKT
 from flask import Flask, jsonify, request, send_from_directory, send_file
 
 load_dotenv()
@@ -81,7 +82,7 @@ def create_app(config_name=None):
                 "api": "running",
                 "prediction_service_ready": prediction_service_ready,
                 "weather_api_ready": weather_api_ready,
-                "timestamp": datetime.now(timezone.utc).isoformat(),
+                "timestamp": datetime.now(PKT).isoformat(),
             },
         })
 
