@@ -17,11 +17,17 @@ class MLPredictionService:
 
     @classmethod
     def _load_model(cls):
-        if cls._model_cache is not None and cls._preprocessor_cache is not None:
+        if cls._model_cache not in (None, False) and cls._preprocessor_cache not in (None, False):
             return cls._model_cache, cls._preprocessor_cache
             
         if not os.path.exists(MODEL_PATH):
             logger.info("No trained model found at %s — using rule-based fallback", MODEL_PATH)
+            cls._model_cache = False
+            cls._preprocessor_cache = False
+            return None, None
+
+        if not os.path.exists(os.path.join(PIPELINES_DIR, 'imputer.pkl')):
+            logger.info("No preprocessor pipeline found at %s — using rule-based fallback", PIPELINES_DIR)
             cls._model_cache = False
             cls._preprocessor_cache = False
             return None, None
@@ -30,7 +36,8 @@ class MLPredictionService:
             import joblib
             from .preprocessing.preprocessing import SolarDataPreprocessor
             
-            cls._model_cache = joblib.load(MODEL_PATH)
+            raw = joblib.load(MODEL_PATH)
+            cls._model_cache = raw.get("model", raw) if isinstance(raw, dict) else raw
             cls._preprocessor_cache = SolarDataPreprocessor.load(PIPELINES_DIR)
             
             logger.info("ML model and preprocessor loaded successfully")
